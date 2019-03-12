@@ -7,7 +7,8 @@ def index(request):
     
     return HttpResponse("Hello World. You're at Ayo")
 
-
+# 매주 일요일 실행 될 크롤러. 
+#크롤링 후 데이터베이스에 저장해야한다.
 def crawler(request):
     url = "http://www.kopo.ac.kr/incheon/content.do?menu=6893"
     header = {'user-agent': ''}
@@ -21,13 +22,9 @@ def crawler(request):
 
     print(type(contents))
     c =[]
-    for i in range(1,5):
+    for i in range(1,6):
         a = contents[i].text.strip('\n').split('\n')
-        #print(a) 
         c.append([x for x in a if x])
-        
-        # print(c[2].split()) # 점심
-        # print("*" *50)
 
     for j in c:
         for i in j:
