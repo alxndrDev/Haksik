@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import requests
 from bs4 import BeautifulSoup
-
+from .models import Menu
+import re
 def index(request):
     
     return HttpResponse("Hello World. You're at Ayo")
@@ -20,14 +21,18 @@ def crawler(request):
 
     contents = soup.select('.tbl_table tbody tr')
 
-    print(type(contents))
     c =[]
     for i in range(1,6):
         a = contents[i].text.strip('\n').split('\n')
         c.append([x for x in a if x])
-
+    when = ['월','화','수','목','금',]
     for j in c:
         for i in j:
-            print(i)
-        print("*"*50)
-    return HttpResponse(c)
+            if len(i) == 0:
+                i = when[j]
+            print(i.strip())
+            print("*"*50)
+        fb = Menu(day=j, menu = j)
+        fb.save()
+    
+    return HttpResponse("Success")
