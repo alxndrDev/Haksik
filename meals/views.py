@@ -4,6 +4,9 @@ import requests
 from bs4 import BeautifulSoup
 from .models import Menu
 import re
+import datetime
+
+
 def index(request):
     
     return HttpResponse("Hello World. You're at Ayo")
@@ -23,16 +26,17 @@ def crawler(request):
 
     c =[]
     for i in range(1,6):
-        a = contents[i].text.strip('\n').split('\n')
+        a = contents[i].get_text().strip('\n').split('\n')
         c.append([x for x in a if x])
     when = ['월','화','수','목','금',]
-    for j in c:
-        for i in j:
-            if len(i) == 0:
-                i = when[j]
-            print(i.strip())
+    for j in range(0,len(c)):
+        for i in range(0,4):
+            print(j , i)
+            if i == 0:
+                c[j][i] = when[j] +""+datetime.date.today() + datetime.timedelta(days=1)
+            print(c[j][i])
             print("*"*50)
-        fb = Menu(day=j, menu = j)
-        fb.save()
+        #fb = Menu(day=j, menu = j)
+        #fb.save()
     
     return HttpResponse("Success")

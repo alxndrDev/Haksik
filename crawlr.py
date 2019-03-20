@@ -15,12 +15,10 @@ contents = soup.select('.tbl_table tbody tr')
 print(type(contents))
 c =[]
 for i in range(1,5):
-    a = contents[i].text.strip('\n').split('\n')
-    #print(a) 
+    a = contents[i].get_text().strip('\n').split('\n')
+
     c.append([x for x in a if x])
-    
-    # print(c[2].split()) # 점심
-    # print("*" *50)
+
 
 for j in c:
     for i in j:
