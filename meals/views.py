@@ -33,10 +33,10 @@ def crawler(request):
         for i in range(0,4):
             print(j , i)
             if i == 0:
-                c[j][i] = when[j] +""+datetime.date.today() + datetime.timedelta(days=1)
+                c[j][i] = when[j]+"/"+str(datetime.date.today() + datetime.timedelta(days=j))
             print(c[j][i])
             print("*"*50)
-        #fb = Menu(day=j, menu = j)
-        #fb.save()
+        fb = Menu(day=c[j][0], menu = c[j][1]+"/"+c[j][2]+"/"+c[j][3])
+        fb.save()
     
-    return HttpResponse("Success")
+    return HttpResponse(c)
