@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from .models import Menu
 import re
 import datetime
+from django.http import JsonResponse
 
 
 def index(request):
@@ -25,6 +26,8 @@ def crawler(request):
     contents = soup.select('.tbl_table tbody tr')
 
     c =[]
+    menu_db = Menu.objects.all()
+    menu_db.delete()
     for i in range(1,6):
         a = contents[i].get_text().strip('\n').split('\n')
         c.append([x for x in a if x])
@@ -36,7 +39,16 @@ def crawler(request):
                 c[j][i] = when[j]+"/"+str(datetime.date.today() + datetime.timedelta(days=j))
             print(c[j][i])
             print("*"*50)
+        
         fb = Menu(day=c[j][0], menu = c[j][1]+"/"+c[j][2]+"/"+c[j][3])
         fb.save()
     
     return HttpResponse(c)
+
+
+def keyboard(request):
+    
+    return JsonResponse({
+        'type':'buttons',
+        'button' : ['오늘','내일'],
+    }, json_dumps_params={'ensure_ascii': True})
