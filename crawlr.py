@@ -32,7 +32,7 @@ def send_slack():
     n = datetime.datetime.today().weekday()
     string = make_str(c[n])
 
-    url = "https://hooks.slack.com/services/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"
+    url = "Your Key"
     content = string  
     payload = {
         "username":"BOT",
