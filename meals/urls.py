@@ -3,6 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name = "index"),
-    path("crawler/", views.crawler, name = "crawler"),
-    path("keyboard/", views.keyboard, name ="keyboard")
+    path('keyboard/', views.keyboard),
+    path('crawler', views.crawler)
 ]

@@ -50,5 +50,5 @@ def keyboard(request):
     
     return JsonResponse({
         'type':'buttons',
-        'button' : ['오늘','내일'],
+        'button' : ['today','tomorrow'],
     }, json_dumps_params={'ensure_ascii': True})
