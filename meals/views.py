@@ -31,7 +31,7 @@ def crawler(request):
     for i in range(1,6):
         a = contents[i].get_text().strip('\n').split('\n')
         c.append([x for x in a if x])
-    when = ['월','화','수','목','금',]
+    when = ['Mon','Tue','Wed','Thu','Fri']
     for j in range(0,len(c)):
         for i in range(0,4):
             print(j , i)
@@ -52,3 +52,28 @@ def keyboard(request):
         'type':'buttons',
         'button' : ['today','tomorrow'],
     }, json_dumps_params={'ensure_ascii': True})
+
+
+def today(request):
+    today = datetime.date.today().weekday()
+    when = ['Mon','Tue','Wed','Thu','Fri']
+    meal = Menu.objects.get(day = when[0]+"/"+str(datetime.date.today())).menu
+    splited = meal.split('/')
+    morning = splited[0]
+    lunch = splited[1]
+    dinner = splited[2]
+   # return HttpResponse(meal)
+    return JsonResponse({
+        'morning' : morning,
+        'lunch' : lunch,
+        'dinner' : dinner,
+    }, json_dumps_params={'ensure_ascii': False})
+
+
+
+
+def deleteDB(request):
+    queryset = Menu.objects.all()
+    for menu in queryset :
+        menu.delete()
+    return HttpResponse("Succeessssdasds")
