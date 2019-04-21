@@ -6,14 +6,16 @@ from .models import Menu
 import re
 import datetime
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
-
+@csrf_exempt
 def index(request):
     
     return HttpResponse("Hello World. You're at Ayo")
 
 # 매주 일요일 실행 될 크롤러. 
 #크롤링 후 데이터베이스에 저장해야한다.
+@csrf_exempt
 def crawler(request):
     url = "http://www.kopo.ac.kr/incheon/content.do?menu=6893"
     header = {'user-agent': ''}
@@ -45,7 +47,7 @@ def crawler(request):
     
     return HttpResponse(c)
 
-
+@csrf_exempt
 def keyboard(request):
     
     return JsonResponse({
@@ -53,7 +55,7 @@ def keyboard(request):
         'button' : ['today','tomorrow'],
     }, json_dumps_params={'ensure_ascii': True})
 
-
+@csrf_exempt
 def today(request):
     today = datetime.date.today().weekday()
     when = ['Mon','Tue','Wed','Thu','Fri']
@@ -71,7 +73,7 @@ def today(request):
 
 
 
-
+@csrf_exempt
 def deleteDB(request):
     queryset = Menu.objects.all()
     for menu in queryset :
