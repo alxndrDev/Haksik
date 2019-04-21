@@ -8,6 +8,8 @@ import datetime
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+
+when = ['Mon','Tue','Wed','Thu','Fri']
 @csrf_exempt
 def index(request):
     
@@ -33,7 +35,7 @@ def crawler(request):
     for i in range(1,6):
         a = contents[i].get_text().strip('\n').split('\n')
         c.append([x for x in a if x])
-    when = ['Mon','Tue','Wed','Thu','Fri']
+   
     for j in range(0,len(c)):
         for i in range(0,4):
             print(j , i)
@@ -58,7 +60,7 @@ def keyboard(request):
 @csrf_exempt
 def today(request):
     today = datetime.date.today().weekday()
-    when = ['Mon','Tue','Wed','Thu','Fri']
+    
     meal = Menu.objects.get(day = when[0]+"/"+str(datetime.date.today())).menu
     splited = meal.split('/')
     morning = splited[0]
@@ -66,11 +68,26 @@ def today(request):
     dinner = splited[2]
    # return HttpResponse(meal)
     return JsonResponse({
+        'date': datetime.date.today(),
         'morning' : morning,
         'lunch' : lunch,
         'dinner' : dinner,
     }, json_dumps_params={'ensure_ascii': False})
-
+    
+@csrf_exempt
+def tomorrow(request):
+    today = datetime.date.today.weekday()
+    meal = Menu.objects.get(day = when[today+1]+"/"+str(datetime.date.today()+datetime.timedelta(days = 1)))
+    splited = meal.split('/')
+    morning = splited[0]
+    lunch = splited[1]
+    dinner = splited[2]
+    return JsonResponse({
+        'date': str(datetime.date.today()+datetime.timedelta(days = 1)),
+        'morning' : morning,
+        'lunch' : lunch,
+        'dinner' : dinner,
+    }, json_dumps_params={'ensure_ascii': False})
 
 
 @csrf_exempt
