@@ -61,7 +61,7 @@ def keyboard(request):
 def today(request):
     today = datetime.date.today().weekday()
     
-    meal = Menu.objects.get(day = when[0]+"/"+str(datetime.date.today())).menu
+    meal = Menu.objects.get(day = when[today]+"/"+str(datetime.date.today())).menu
     splited = meal.split('/')
     morning = splited[0]
     lunch = splited[1]
@@ -73,10 +73,10 @@ def today(request):
         'lunch' : lunch,
         'dinner' : dinner,
     }, json_dumps_params={'ensure_ascii': False})
-    
+
 @csrf_exempt
 def tomorrow(request):
-    today = datetime.date.today.weekday()
+    today = datetime.date.today().weekday()
     meal = Menu.objects.get(day = when[today+1]+"/"+str(datetime.date.today()+datetime.timedelta(days = 1)))
     splited = meal.split('/')
     morning = splited[0]
