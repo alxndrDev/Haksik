@@ -77,7 +77,7 @@ def today(request):
 @csrf_exempt
 def tomorrow(request):
     today = datetime.date.today().weekday()
-    meal = Menu.objects.get(day = when[today+1]+"/"+str(datetime.date.today()+datetime.timedelta(days = 1)))
+    meal = Menu.objects.get(day = when[today+1]+"/"+str(datetime.date.today()+datetime.timedelta(days = 1))).menu
     splited = meal.split('/')
     morning = splited[0]
     lunch = splited[1]
