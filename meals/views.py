@@ -10,6 +10,13 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 when = ['Mon','Tue','Wed','Thu','Fri']
+today_num = 0
+none_today = "학식없음"
+morning = none_today
+lunch = none_today
+dinner = none_today
+
+
 @csrf_exempt
 def index(request):
     
@@ -49,23 +56,16 @@ def crawler(request):
     
     return HttpResponse(c)
 
-@csrf_exempt
-def keyboard(request):
-    
-    return JsonResponse({
-        'type':'buttons',
-        'button' : ['today','tomorrow'],
-    }, json_dumps_params={'ensure_ascii': True})
 
 @csrf_exempt
 def today(request):
-    today = datetime.date.today().weekday()
-    
-    meal = Menu.objects.get(day = when[today]+"/"+str(datetime.date.today())).menu
-    splited = meal.split('/')
-    morning = splited[0]
-    lunch = splited[1]
-    dinner = splited[2]
+    today_num = getWeekday()
+    if((today_num != 5) & (today_num != 6)):
+        meal = get_Menu(1)  
+        splited = meal.split('/')
+        morning = splited[0]
+        lunch = splited[1]
+        dinner = splited[2]
    # return HttpResponse(meal)
     return JsonResponse({
         'date': datetime.date.today(),
@@ -74,14 +74,19 @@ def today(request):
         'dinner' : dinner,
     }, json_dumps_params={'ensure_ascii': False})
 
+def getWeekday():
+    return datetime.date.today().weekday()
+
 @csrf_exempt
 def tomorrow(request):
-    today = datetime.date.today().weekday()
-    meal = Menu.objects.get(day = when[today+1]+"/"+str(datetime.date.today()+datetime.timedelta(days = 1))).menu
-    splited = meal.split('/')
-    morning = splited[0]
-    lunch = splited[1]
-    dinner = splited[2]
+    today_num = getWeekday()
+    
+    if((today_num != 5) & (today_num != 6)):
+        meal = get_Menu(0)
+        splited = meal.split('/')
+        morning = splited[0]
+        lunch = splited[1]
+        dinner = splited[2]
     return JsonResponse({
         'date': str(datetime.date.today()+datetime.timedelta(days = 1)),
         'morning' : morning,
@@ -89,6 +94,22 @@ def tomorrow(request):
         'dinner' : dinner,
     }, json_dumps_params={'ensure_ascii': False})
 
+
+def get_Menu(flag):
+    date_str = ""
+
+    if flag == 0 :  # 내일 
+        date_str = str(datetime.date.today()+datetime.timedelta(days = 1))
+        meal = Menu.objects.get(day = when[today_num+1]+"/"+date_str).menu
+    elif flag == 1: # 오늘
+        date_str = str(datetime.date.today())
+        meal = Menu.objects.get(day = when[today_num]+"/"+date_str).menu
+    return meal
+
+@csrf_exempt
+def select_date(request):
+
+    return 0
 
 @csrf_exempt
 def deleteDB(request):
