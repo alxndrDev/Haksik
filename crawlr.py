@@ -2,12 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 import datetime
 import json
-
-
 c =[]
 def crawler():
     url = "http://www.kopo.ac.kr/incheon/content.do?menu=6893"
-    header = {'user-agent': ''}
+    
     response = requests.get(url)
 
     html = response.text

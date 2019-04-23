@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 when = ['Mon','Tue','Wed','Thu','Fri']
-today_num = 0
+
 none_today = "학식없음"
 morning = none_today
 lunch = none_today
@@ -62,7 +62,7 @@ def crawler(request):
 def today(request):
     today_num = getWeekday()
     if((today_num != 5) & (today_num != 6)):
-        meal = get_Menu(1)  
+        meal = get_Menu(1, today_num)  
         splited = meal.split('/')
         morning = splited[0]
         lunch = splited[1]
@@ -83,7 +83,7 @@ def tomorrow(request):
     today_num = getWeekday()
     
     if((today_num != 5) & (today_num != 6)):
-        meal = get_Menu(0)
+        meal = get_Menu(0, today_num)
         splited = meal.split('/')
         morning = splited[0]
         lunch = splited[1]
@@ -96,7 +96,7 @@ def tomorrow(request):
     }, json_dumps_params={'ensure_ascii': False})
 
 
-def get_Menu(flag):
+def get_Menu(flag, today_num):
     date_str = ""
 
     if flag == 0 :  # 내일 
