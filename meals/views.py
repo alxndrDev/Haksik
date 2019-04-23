@@ -17,6 +17,7 @@ lunch = none_today
 dinner = none_today
 
 
+
 @csrf_exempt
 def index(request):
     
