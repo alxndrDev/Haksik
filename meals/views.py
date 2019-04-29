@@ -11,12 +11,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 when = ['Mon','Tue','Wed','Thu','Fri']
 
-none_today = "학식없음"
-morning = none_today
-lunch = none_today
-dinner = none_today
-
-
 
 @csrf_exempt
 def index(request):
@@ -60,7 +54,13 @@ def crawler(request):
 
 @csrf_exempt
 def today(request):
+    
+    none_today = "학식없음"
+    morning = none_today
+    lunch = none_today
+    dinner = none_today
     today_num = getWeekday()
+
     if((today_num != 5) & (today_num != 6)):
         meal = get_Menu(1, today_num)  
         splited = meal.split('/')
@@ -81,6 +81,10 @@ def getWeekday():
 @csrf_exempt
 def tomorrow(request):
     today_num = getWeekday()
+    none_today = "학식없음"
+    morning = none_today
+    lunch = none_today
+    dinner = none_today
     
     if((today_num != 5) & (today_num != 6)):
         meal = get_Menu(0, today_num)
