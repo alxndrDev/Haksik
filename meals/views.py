@@ -7,7 +7,7 @@ import re
 import datetime
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
+from django.core.exceptions import ObjectDoesNotExist
 
 when = ['Mon','Tue','Wed','Thu','Fri']
 
@@ -60,13 +60,14 @@ def today(request):
     lunch = none_today
     dinner = none_today
     today_num = getWeekday()
-
-    if((today_num != 5) & (today_num != 6)):
-        meal = get_Menu(1, today_num)
-        splited = meal.split('/')
-        morning = splited[0]
-        lunch = splited[1]
-        dinner = splited[2]
+    
+    if((today_num != 5) & (today_num != 6)):  
+            meal = get_Menu(1, today_num)
+            if not meal is None:
+                splited = meal.split('/')
+                morning = splited[0]
+                lunch = splited[1]
+                dinner = splited[2]
    # return HttpResponse(meal)
     return JsonResponse({
         'date': datetime.date.today(),
@@ -85,13 +86,17 @@ def tomorrow(request):
     morning = none_today
     lunch = none_today
     dinner = none_today
-
-    if(((today_num+1) != 5) & ((today_num+1) != 6)):
+    if today_num == 6 :
+        today_num = 0
+    else :
+        today_num = today_num + 1
+    if((today_num != 5) & (today_num != 6)):
         meal = get_Menu(0, today_num)
-        splited = meal.split('/')
-        morning = splited[0]
-        lunch = splited[1]
-        dinner = splited[2]
+        if not meal is None:
+            splited = meal.split('/')
+            morning = splited[0]
+            lunch = splited[1]
+            dinner = splited[2]
     return JsonResponse({
         'date': str(datetime.date.today()+datetime.timedelta(days = 1)),
         'morning' : morning,
@@ -105,10 +110,16 @@ def get_Menu(flag, today_num):
 
     if flag == 0 :  # 내일
         date_str = str(datetime.date.today()+datetime.timedelta(days = 1))
-        meal = Menu.objects.get(day = when[today_num+1]+"/"+date_str).menu
+        try : 
+            meal = Menu.objects.get(day = when[today_num+1]+"/"+date_str).menu
+        except ObjectDoesNotExist:
+            return 
     elif flag == 1: # 오늘
         date_str = str(datetime.date.today())
-        meal = Menu.objects.get(day = when[today_num]+"/"+date_str).menu
+        try:
+            meal = Menu.objects.get(day = when[today_num]+"/"+date_str).menu
+        except ObjectDoesNotExist:
+            return
     return meal
 
 @csrf_exempt
