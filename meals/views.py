@@ -62,12 +62,12 @@ def today(request):
     today_num = getWeekday()
     
     if((today_num != 5) & (today_num != 6)):  
-            meal = get_Menu(1, today_num)
-            if not meal is None:
-                splited = meal.split('/')
-                morning = splited[0]
-                lunch = splited[1]
-                dinner = splited[2]
+        meal = get_Menu(1, today_num)
+        if not meal is None:
+            splited = meal.split('/')
+            morning = splited[0]
+            lunch = splited[1]
+            dinner = splited[2]
    # return HttpResponse(meal)
     return JsonResponse({
         'date': datetime.date.today(),
@@ -90,6 +90,7 @@ def tomorrow(request):
         today_num = 0
     else :
         today_num = today_num + 1
+        
     if((today_num != 5) & (today_num != 6)):
         meal = get_Menu(0, today_num)
         if not meal is None:
@@ -108,12 +109,12 @@ def tomorrow(request):
 def get_Menu(flag, today_num):
     date_str = ""
 
-    if flag == 0 :  # 내일
+    if flag == 0 : # 내일
         date_str = str(datetime.date.today()+datetime.timedelta(days = 1))
-        try : 
-            meal = Menu.objects.get(day = when[today_num+1]+"/"+date_str).menu
-        except ObjectDoesNotExist:
-            return 
+        try :
+            meal = Menu.objects.get(day = when[today_num]+"/"+date_str).menu
+        except ObjectDoesNotExist as a:
+            return
     elif flag == 1: # 오늘
         date_str = str(datetime.date.today())
         try:
