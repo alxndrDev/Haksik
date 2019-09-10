@@ -44,7 +44,7 @@ def crawler(request):
                     c[j][i] = when[j]+"/"+str(datetime.date.today() + datetime.timedelta(days=j))
                     print(c[j][i])
             
-
+            
             fb = Menu(day=c[j][0], menu = c[j][1]+"/"+c[j][2]+"/"+c[j][3])
             fb.save()
         send_slack("삐빅..크롤러 정상 작동중입니다.")
@@ -136,6 +136,15 @@ def deleteDB(request):
     for menu in queryset :
         menu.delete()
     return HttpResponse("Succeessssdasds")
+
+@csrf_exempt
+def available(request):
+    try:
+        send_slack("Server is still alive!")
+        return HttpResponse(None)
+    except Exception as ex:
+        send_slack("Server has Something Problem. :(")
+        return HttpResponse(None)
 
 
 def send_slack(message):
